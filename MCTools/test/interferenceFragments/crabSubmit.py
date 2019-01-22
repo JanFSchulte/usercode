@@ -25,10 +25,10 @@ config.Data.totalUnits = 100000
 config.Data.publication = False
 config.Data.publishDBS = 'phys03' 
 config.Data.outputDatasetTag = '%s'
-config.Data.outLFNDirBase = '/store/user/cschnaib/ZPrime/'
+config.Data.outLFNDirBase = '/store/user/jschulte/ZPrime/'
  
 #config.section_("Site")
-config.Site.storageSite = "T2_CH_CERN"
+config.Site.storageSite = "T2_US_Purdue"
 
 #config.section_("User")
 '''
@@ -38,8 +38,8 @@ interference = 0 # turns on interference, set to 3 for Z' only and 4 for Z/gamma
 #masses = [1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000]
 masses = [4000,4500,5000,5500,6000,6500,7000,7500,8000]
 massBins = [120,200,400,800,1400,2300,3500,4500,6000,-1]
-#models = ["ZPrimeQ","ZPrimeSSM","ZPrimePSI","ZPrimeN","ZPrimeSQ","ZPrimeI","ZPrimeEta","ZPrimeChi","ZPrimeR","ZPrimeB-L","ZPrimeLR","ZPrimeY","ZPrimeT3L"]
-models = ["ZPrimeQ","ZPrimeSSM","ZPrimeSQ","ZPrimeR","ZPrimeB-L","ZPrimeLR","ZPrimeY","ZPrimeT3L"]
+models = ["ZPrimeQ","ZPrimeSSM","ZPrimePSI","ZPrimeN","ZPrimeSQ","ZPrimeI","ZPrimeEta","ZPrimeChi","ZPrimeR","ZPrimeB-L","ZPrimeLR","ZPrimeY","ZPrimeT3L"]
+#models = ["ZPrimeQ","ZPrimeSSM","ZPrimeSQ","ZPrimeR","ZPrimeB-L","ZPrimeLR","ZPrimeY","ZPrimeT3L"]
 #decays = {"EE":11}
 decays = {"EE":11,"MuMu":13}
 if True:

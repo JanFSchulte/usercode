@@ -207,8 +207,10 @@ void PDFTreeMaker::analyze(const edm::Event& iEvent,const edm::EventSetup& iSetu
 
 
 bool PDFTreeMaker::isBoson(int pid)
+
 {
-  if(pid==23 || abs(pid)==24 || pid==32 || pid==5100039) return true;
+  std::cout << pid << std::endl;
+  if(pid==23 || abs(pid)==24 || pid==32 || pid==5100039 || pid == 39) return true;
   else return false;
 }
 
