@@ -102,6 +102,7 @@ private:
   int ele2PID_;
   int bosonId_;
 
+  edm::InputTag genRunInfoTag_;
   edm::InputTag genPartsTag_;
   edm::InputTag genEvtInfoTag_;
   edm::InputTag pdfWeightsTag_;
@@ -124,13 +125,18 @@ public:
 };
 
 PDFTreeMaker::PDFTreeMaker(const edm::ParameterSet& para)
-
+:
+  genRunInfoTag_(para.getParameter<edm::InputTag>("genEvtInfoTag")),
+  genPartsTag_(para.getParameter<edm::InputTag>("genPartsTag")),
+  genEvtInfoTag_(para.getParameter<edm::InputTag>("genEvtInfoTag")),
+  pdfWeightsTag_(para.getParameter<edm::InputTag>("pdfWeightsTag")),
+  datasetCode_(para.getParameter<int>("datasetCode")),
+  decayParticlePID_(para.getParameter<int>("decayParticlePID"))
 {
-  genPartsTag_=para.getParameter<edm::InputTag>("genPartsTag");
-  genEvtInfoTag_=para.getParameter<edm::InputTag>("genEvtInfoTag");
-  pdfWeightsTag_=para.getParameter<edm::InputTag>("pdfWeightsTag");
-  datasetCode_=para.getParameter<int>("datasetCode");
-  decayParticlePID_ = para.getParameter<int>("decayParticlePID");
+  consumes<GenRunInfoProduct,edm::InRun>(genRunInfoTag_);
+  consumes<GenEventInfoProduct>(genEvtInfoTag_);
+  consumes<std::vector<reco::GenParticle>>(genPartsTag_);
+  mayConsume<std::vector<double>>(pdfWeightsTag_);
   
 }
 
@@ -209,7 +215,6 @@ void PDFTreeMaker::analyze(const edm::Event& iEvent,const edm::EventSetup& iSetu
 bool PDFTreeMaker::isBoson(int pid)
 
 {
-  std::cout << pid << std::endl;
   if(pid==23 || abs(pid)==24 || pid==32 || pid==5100039 || pid == 39) return true;
   else return false;
 }
@@ -254,7 +259,7 @@ void PDFTreeMaker::endJob()
 void PDFTreeMaker::endRun(edm::Run const& iRun, edm::EventSetup const&)
 {
   edm::Handle< GenRunInfoProduct > genInfoProduct;
-  iRun.getByLabel("generator", genInfoProduct );
+  iRun.getByLabel(genRunInfoTag_, genInfoProduct );
   TParameter<float>* crossSec=new TParameter<float>("crossSec",0);
   crossSec->SetVal(genInfoProduct->internalXSec().value());  
   tree_->GetUserInfo()->Add(crossSec);

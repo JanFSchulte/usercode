@@ -60,19 +60,23 @@ private:
   virtual void endRun(edm::Run const&, edm::EventSetup const&);
   
 
+  edm::InputTag genRunInfoTag_;
+
       
 };
 
 
 CrossSecTreeMaker::CrossSecTreeMaker(const edm::ParameterSet& iConfig)
+:
+  genRunInfoTag_(iConfig.getParameter<edm::InputTag>("genEvtInfoTag"))
 
 { 
-
-  mass_ = iConfig.getParameter<double>("mass");
+  consumes<GenRunInfoProduct,edm::InRun>(genRunInfoTag_);
+   mass_ = iConfig.getParameter<double>("mass");
   datasetName_ = iConfig.getParameter<std::string>("datasetName");
   datasetCode_ = iConfig.getParameter<int>("datasetCode");
   cmsEnergy_ = iConfig.getParameter<double>("cmsEnergy");
-  
+
 
 }
 
@@ -85,7 +89,7 @@ CrossSecTreeMaker::~CrossSecTreeMaker()
 
 void CrossSecTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-   
+  
 }
 
 
@@ -106,8 +110,9 @@ void CrossSecTreeMaker::beginJob()
 
 void CrossSecTreeMaker::endRun(edm::Run const& iRun, edm::EventSetup const&)
 {
+
   edm::Handle< GenRunInfoProduct > genInfoProduct;
-  iRun.getByLabel("generator", genInfoProduct );
+  iRun.getByLabel(genRunInfoTag_, genInfoProduct );
   crossSec_ = genInfoProduct->internalXSec().value();
   crossSecErr_ = genInfoProduct->internalXSec().error();
   tree_->Fill();

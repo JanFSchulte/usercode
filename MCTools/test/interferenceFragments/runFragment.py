@@ -28,18 +28,22 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
-process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
+process.load('Configuration.StandardSequences.GeometrySimDB_cff')
+process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
-process.load('IOMC.EventVertexGenerators.VtxSmearedNominalCollision2015_cfi')
+process.load('IOMC.EventVertexGenerators.VtxSmearedRealistic25ns13TeVEarly2017Collision_cfi')
 process.load('GeneratorInterface.Core.genFilterSummary_cff')
+process.load('Configuration.StandardSequences.SimIdeal_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+
+
 process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(
     reportEvery = cms.untracked.int32(500),
-    limit = cms.untracked.int32(10000000)
+    limit = cms.untracked.int32(1000)
 )
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(1000)
 )
 
 # Input source
@@ -51,7 +55,7 @@ process.options = cms.untracked.PSet(
 # Other statements
 process.genstepfilter.triggerConditions=cms.vstring("generation_step")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_71_V1::All')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase1_2017_realistic')
 
 process.load(options.fragment.split(".")[0])
 
@@ -65,7 +69,8 @@ process.crossSecTreeMaker =  cms.EDAnalyzer("CrossSecTreeMaker",
                                             mass=cms.double(massVal),
                                             datasetName=cms.string(options.fragment.split(".")[0]+".root"),
                                             datasetCode=cms.int32(datasetCode),
-                                            cmsEnergy=cms.double(13)
+                                            cmsEnergy=cms.double(13),
+					    genEvtInfoTag = cms.InputTag("generator")
                                             )
 
 process.pdfTreeMaker = cms.EDAnalyzer("PDFTreeMaker",
